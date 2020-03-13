@@ -2,12 +2,16 @@ import React, {useState} from 'react';
 
 const SearchBar = (props) => {
 
+    const [fetchLimit, setFetchLimit] = useState(0);
+
     function inputHandler(event){
         props.setKeyword(event.target.value);
+        setFetchLimit(fetchLimit + 1);
     }
 
     function onFormSubmit(event){
         event.preventDefault();
+        setFetchLimit(0);
         props.emptyImageArray();
         props.searchImages();
     }

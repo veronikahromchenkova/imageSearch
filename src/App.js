@@ -15,7 +15,8 @@ function App() {
     const [page, setPage] = useState(1);
     const [title, setTitle] = useState("Image Search app");
     const [hasMore, setHasMore] = useState(true);
-
+    const [fetchLimit, setFetchLimit] = useState(0);
+    const [endMessage, setEndMessage] = useState('You have seen it all');
 
     useEffect(() => {
         document.title = title;
@@ -23,27 +24,35 @@ function App() {
 
     async function searchImages(page= 1, per_page= 30){
         setLoading(true);
-        const url = "https://api.unsplash.com/search/photos";
-        await axios.get(url, {
-            params: {
-                query: keyword,
-                page: page,
-                per_page: per_page
-            },
-            headers: {
-                Authorization: 'Client-ID '+clientId
-            }
-        })
-            .then(response => {
-                setLoading(false);
-                setTitle(keyword + " Pictures");
-                const newImages = [...images,...response.data.results];
-                setImages(newImages);
+        setFetchLimit(fetchLimit + 1);
+        console.log(fetchLimit);
+        if(fetchLimit < 2) {
+            const url = "https://api.unsplash.com/search/photos";
+            await axios.get(url, {
+                params: {
+                    query: keyword,
+                    page: page,
+                    per_page: per_page
+                },
+                headers: {
+                    Authorization: 'Client-ID ' + clientId
+                }
             })
-            .catch(err => {
-                setHasMore(false);
-                console.log(err);
-            });
+                .then(response => {
+                    setLoading(false);
+                    setTitle(keyword + " Pictures");
+                    const newImages = [...images, ...response.data.results];
+                    setImages(newImages);
+                })
+                .catch(err => {
+                    setHasMore(false);
+                    console.log(err);
+                });
+        } else{
+            setHasMore(false);
+            setEndMessage('You have reached limit');
+            setFetchLimit(0);
+        }
     }
 
     const keywordInputHandler = (input) => {
@@ -71,7 +80,7 @@ function App() {
                 dataLength={images.length}
                 endMessage={
                     <p style={{textAlign: 'center', marginBottom: 40}}>
-                        <b>You have seen it all</b>
+                        <b>{endMessage}</b>
                     </p>
                 }
             >
