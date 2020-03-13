@@ -17,22 +17,23 @@ function App() {
     const [hasMore, setHasMore] = useState(true);
     const [fetchLimit, setFetchLimit] = useState(0);
     const [endMessage, setEndMessage] = useState('You have seen it all');
+    const [noResultText, setNoResultText] = useState('');
 
     useEffect(() => {
         document.title = title;
+        setFetchLimit(0);
     },[title]);
 
     async function searchImages(page= 1, per_page= 30){
         setLoading(true);
         setFetchLimit(fetchLimit + 1);
-        console.log(fetchLimit);
         if(fetchLimit < 2) {
             const url = "https://api.unsplash.com/search/photos";
             await axios.get(url, {
                 params: {
                     query: keyword,
                     page: page,
-                    per_page: per_page
+                    per_page: per_page,
                 },
                 headers: {
                     Authorization: 'Client-ID ' + clientId
@@ -43,6 +44,11 @@ function App() {
                     setTitle(keyword + " Pictures");
                     const newImages = [...images, ...response.data.results];
                     setImages(newImages);
+                    if(response.data.total === 0){
+                        setNoResultText('No Results');
+                    } else{
+                        setNoResultText('');
+                    }
                 })
                 .catch(err => {
                     setHasMore(false);
@@ -51,7 +57,6 @@ function App() {
         } else{
             setHasMore(false);
             setEndMessage('You have reached limit');
-            setFetchLimit(0);
         }
     }
 
@@ -64,7 +69,7 @@ function App() {
         setHasMore(true);
     };
 
-    let loader = (loading) ? <Loader type="ThreeDots" color="#somecolor" height={80} width={80} /> : '';
+    let loader = (loading) ? <Loader className="loader" type="ThreeDots" color="#somecolor" height={80} width={80} /> : '';
 
     return (
         <div className="App">
@@ -86,7 +91,7 @@ function App() {
             >
                 <ImageList foundImages={images} loading={loading} />
             </InfiniteScroll>
-
+            {noResultText}
         </div>
     );
 }
