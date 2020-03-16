@@ -5,23 +5,26 @@ import ImageList from './components/imageList';
 import SearchBar from "./components/searchBar";
 import Loader from 'react-loader-spinner'
 import InfiniteScroll from 'react-infinite-scroll-component';
+require('dotenv').config();
 
 function App() {
 
-    const [clientId] = useState("45ENxImi0H7rjXGOdnzQthNGD7ES3Jf9KaFzHTRvA0o");
+    const clientId = process.env.REACT_APP_CLIENT_ID;
     const [keyword, setKeyword] = useState("");
     const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
-    const [title, setTitle] = useState("Image Search app");
+    const [title, setTitle] = useState("Image Search App");
     const [hasMore, setHasMore] = useState(true);
     const [fetchLimit, setFetchLimit] = useState(0);
     const [endMessage, setEndMessage] = useState('You have seen it all');
     const [noResultText, setNoResultText] = useState('');
 
+
     useEffect(() => {
         document.title = title;
         setFetchLimit(0);
+
     },[title]);
 
     async function searchImages(page= 1, per_page= 30){
@@ -57,6 +60,7 @@ function App() {
         } else{
             setHasMore(false);
             setEndMessage('You have reached limit');
+            setFetchLimit(0);
         }
     }
 

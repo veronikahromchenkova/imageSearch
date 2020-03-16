@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import axios from "axios";
+require('dotenv').config();
 
 const ImageCard = (props) => {
 
@@ -20,7 +21,7 @@ const ImageCard = (props) => {
         const url = props.image.links.download_location;
         axios.get(url, {
             headers: {
-                Authorization: 'Client-ID 45ENxImi0H7rjXGOdnzQthNGD7ES3Jf9KaFzHTRvA0o'
+                Authorization: 'Client-ID ' + process.env.REACT_APP_CLIENT_ID
             }
         }).then(res => {
             let a = document.createElement('a');
