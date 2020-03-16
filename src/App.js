@@ -63,7 +63,7 @@ function App() {
 
     return (
         <div className="App">
-            <SearchBar searchImages={searchImages} setKeyword={keywordInputHandler} emptyImageArray={emptyImageArray} />
+            <SearchBar searchImages={searchImages} setKeyword={keywordInputHandler}/>
             <InfiniteScroll
                 className="infiniteScroll"
                 next={() => {
