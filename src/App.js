@@ -10,15 +10,13 @@ function App() {
 
     const [keyword, setKeyword] = useState("");
     const [images, setImages] = useState([]);
+    const [totalImages, setTotalImages] = useState(0);
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [title, setTitle] = useState("Image Search App");
     const [hasMore, setHasMore] = useState(true);
     const [fetchLimit, setFetchLimit] = useState(0);
-    const [endMessage, setEndMessage] = useState('You have seen it all');
-    const [noResultText, setNoResultText] = useState('');
     const maxFetchLimit = 2;
-
 
     useEffect(() => {
         document.title = title;
@@ -31,19 +29,19 @@ function App() {
         if(fetchLimit < maxFetchLimit){
             getImages(page, per_page, keyword)
                 .then((response) => {
+                    console.log(response.results)
                     setLoading(false);
                     setTitle(keyword + " Pictures");
-                    const newImages = [...images, ...response.results];
-                    setImages(newImages);
-                    if(response.total === 0){
-                        setNoResultText('No Results');
-                    } else{
-                        setNoResultText('');
+                    setTotalImages(response.total);
+                    if(images.length !== response.total){
+                        const newImages = [...images, ...response.results];
+                        setImages(newImages);
+                    } else if(images.length !== 0) {
+                        setHasMore(false);
                     }
                 })
         } else{
             setHasMore(false);
-            setEndMessage('You have reached limit');
             setFetchLimit(0);
         }
     }
@@ -58,6 +56,8 @@ function App() {
     };
 
     let loader = (loading) ? <Loader className="loader" type="ThreeDots" color="#somecolor" height={80} width={80} /> : '';
+    let noResultText = (images.length === 0) ? 'No Results' : '';
+    let endMessage = (images.length !== totalImages)  ? 'You have reached limit' : 'You have seen it all';
 
     return (
         <div className="App">
