@@ -8,7 +8,6 @@ const SearchBar = (props) => {
 
     function onFormSubmit(event){
         event.preventDefault();
-        props.emptyImageArray();
         props.searchImages();
     }
 

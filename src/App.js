@@ -23,20 +23,27 @@ function App() {
         setFetchLimit(0);
     },[title]);
 
-    function searchImages(page=1, per_page=30) {
+    function searchImages(page=1, per_page=30, moreImages=false) {
         setLoading(true);
         setFetchLimit(fetchLimit + 1);
         if(fetchLimit < maxFetchLimit){
             getImages(page, per_page, keyword)
                 .then((response) => {
-                    console.log(response.results)
                     setLoading(false);
                     setTitle(keyword + " Pictures");
                     setTotalImages(response.total);
-                    if(images.length !== response.total){
-                        const newImages = [...images, ...response.results];
-                        setImages(newImages);
-                    } else if(images.length !== 0) {
+                    let newImages;
+                    if(moreImages){
+                        if(images.length !== response.total){
+                            newImages = [...images, ...response.results];
+                        }
+                    } else{
+                        newImages = response.results;
+                        setHasMore(true);
+                    }
+                    setImages(newImages);
+
+                    if(images.length !== 0) {
                         setHasMore(false);
                     }
                 })
@@ -50,11 +57,6 @@ function App() {
         setKeyword(input);
     };
 
-    const emptyImageArray = () => {
-        images.length = 0;
-        setHasMore(true);
-    };
-
     let loader = (loading) ? <Loader className="loader" type="ThreeDots" color="#somecolor" height={80} width={80} /> : '';
     let noResultText = (images.length === 0) ? 'No Results' : '';
     let endMessage = (images.length !== totalImages)  ? 'You have reached limit' : 'You have seen it all';
@@ -65,7 +67,7 @@ function App() {
             <InfiniteScroll
                 className="infiniteScroll"
                 next={() => {
-                    searchImages(page+1,5);
+                    searchImages(page+1,5, true);
                     setPage(page+1);
                 }}
                 hasMore={hasMore}
