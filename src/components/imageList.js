@@ -1,5 +1,5 @@
 import React from "react";
-import ImageCard from "./ImageCard";
+import ImageCard from "./imageCard";
 
 const ImageList = props => {
   const images = props.foundImages.map((img, index) => {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getImages } from "../../utils/functions";
-import ImageList from "../../components/ImageList";
-import SearchBar from "../../components/SearchBar";
+import ImageList from "../../components/imageList";
+import SearchBar from "../../components/searchBar";
 import Loader from "react-loader-spinner";
 import InfiniteScroll from "react-infinite-scroll-component";
 
