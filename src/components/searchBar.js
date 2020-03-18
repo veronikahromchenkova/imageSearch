@@ -1,32 +1,31 @@
-import React from 'react';
+import React from "react";
 
-const SearchBar = (props) => {
+const SearchBar = props => {
+  function inputHandler(event) {
+    props.setKeyword(event.target.value);
+  }
 
-    function inputHandler(event){
-        props.setKeyword(event.target.value);
-    }
+  function onFormSubmit(event) {
+    event.preventDefault();
+    props.searchImages();
+  }
 
-    function onFormSubmit(event){
-        event.preventDefault();
-        props.searchImages();
-    }
-
-    return (
-        <div className="searchBlock">
-            <h1>Search free photos from Unsplash</h1>
-            <form onSubmit={onFormSubmit}>
-                <input
-                    className="keywordInput"
-                    type="text"
-                    name="photo"
-                    autoComplete="off"
-                    placeholder="Search photos by a keyword"
-                    onChange={inputHandler}
-                />
-                <input className="submitBtn" type={"submit"} value={"Search"}/>
-            </form>
-        </div>
-    )
-}
+  return (
+    <div className="searchBlock">
+      <h1>Search free photos from Unsplash</h1>
+      <form onSubmit={onFormSubmit}>
+        <input
+          className="keywordInput"
+          type="text"
+          name="photo"
+          autoComplete="off"
+          placeholder="Search photos by a keyword"
+          onChange={inputHandler}
+        />
+        <input className="submitBtn" type={"submit"} value={"Search"} />
+      </form>
+    </div>
+  );
+};
 
 export default SearchBar;

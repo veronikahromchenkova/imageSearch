@@ -21,6 +21,13 @@ On scroll the app will load more images until your get your request limit.
 The is an automatic Cypress test that runs and checks the app.<br />
 You can find it in cypress/integration/tests/app_test.js.
 
+## Code formatting
+
+To run automatic code formatting and linting tools, use
+`npm run lint-fix`
+
+This will run `eslint` with default `react-app` config, as well as `prettier` with the default config
+
 ## Running Project Locally
 
 In the project directory, you can run:
