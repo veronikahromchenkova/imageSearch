@@ -1,55 +1,17 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ImageList from "./imageList";
-import Loader from "react-loader-spinner";
-import { getImages } from "../utils/functions";
-import { KeywordContext } from "../context/keywordContext";
 import { ImagesContext } from "../context/imagesContext";
+import useLoader from "../hoooks/useLoader";
+import useImageAdding from "../hoooks/useImageAdding";
 
 const ResultList = props => {
-  const [totalImages, setTotalImages] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
-  const { keyword } = useContext(KeywordContext);
-  const { images, appendImages, requests, page } = useContext(ImagesContext);
-  const requestLimit = 2;
+  const { images } = useContext(ImagesContext);
+  const [loader] = useLoader(props.loading);
+  const [hasMore, endMessage, addImagesOnScroll] = useImageAdding();
 
-  useEffect(() => {
-    setHasMore(true);
-  }, [images]);
-
-  function addImagesOnScroll() {
-    if (requests < requestLimit) {
-      getImages(page, 5, keyword).then(response => {
-        setTotalImages(response.total);
-        console.log(response);
-        if (images.length !== response.total) {
-          let newImages = [...images, ...response.results];
-          appendImages(newImages);
-        } else {
-          setHasMore(false);
-        }
-      });
-    } else {
-      setHasMore(false);
-    }
-  }
-
-  let loader = props.loading ? (
-    <Loader
-      className="loader"
-      type="ThreeDots"
-      color="#333"
-      height={80}
-      width={80}
-    />
-  ) : (
-    ""
-  );
   let noResultText = images.length === 0 ? "No Results" : "";
-  let endMessage =
-    images.length !== totalImages
-      ? "You have reached limit"
-      : "You have seen it all";
+
   return (
     <div>
       <InfiniteScroll
@@ -64,7 +26,7 @@ const ResultList = props => {
           </p>
         }
       >
-        <ImageList foundImages={images} />
+        <ImageList />
       </InfiniteScroll>
       {noResultText}
     </div>

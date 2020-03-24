@@ -1,19 +1,14 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
 import { downloadImage } from "../utils/functions";
+import useSpans from "../hoooks/useSpans";
 
 const ImageCard = props => {
   const imageRef = useRef();
-  const [spans, setSpans] = useState(0);
+  const [spans, calculateSpans] = useSpans(imageRef);
 
   useEffect(() => {
     imageRef.current.addEventListener("load", calculateSpans);
   });
-
-  const calculateSpans = () => {
-    const height = imageRef.current.clientHeight;
-    const spansRows = Math.ceil(height / 10);
-    setSpans(spansRows);
-  };
 
   const downloadHandler = () => {
     downloadImage(props.image);
