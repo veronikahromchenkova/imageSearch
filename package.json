@@ -10,7 +10,7 @@
     "axios": "^0.19.2",
     "cypress": "^4.1.0",
     "dotenv": "^8.2.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-infinite-scroll-component": "^5.0.4",
